@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>holidayclock</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6W5KJJKMLT"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6W5KJJKMLT');
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="clock-card">
+            <div class="current-time">
+                <div class="time-display" id="currentTime">--:--:--</div>
+                <div class="timezone-info" id="timezoneInfo">时区信息</div>
+            </div>
+            
+            <div class="countdown-section">
+                <div class="countdown-item">
+                    <div class="countdown-label">Time until weekend:</div>
+                    <div class="countdown-value" id="weekendCountdown">-- days -- hours -- minutes -- seconds</div>
+                </div>
+                
+                <div class="countdown-item">
+                    <div class="countdown-label">Time until next public holiday <span id="nearestHolidayName"></span></div>
+                    <div class="countdown-value" id="nearestHoliday">-- days -- hours -- minutes -- seconds (-- days vacation)</div>
+                </div>
+                
+                <div class="countdown-item">
+                    <div class="countdown-label">Time until Thanksgiving:</div>
+                    <div class="countdown-value" id="thanksgivingCountdown">-- days -- hours -- minutes -- seconds (-- days vacation)</div>
+                </div>
+                
+                <div class="countdown-item">
+                    <div class="countdown-label">Time until Christmas:</div>
+                    <div class="countdown-value" id="christmasCountdown">-- days -- hours -- minutes -- seconds (-- days vacation)</div>
+                </div>
+                
+                <div class="countdown-item">
+                    <div class="countdown-label">Time until New Year:</div>
+                    <div class="countdown-value" id="newYearCountdown">-- days -- hours -- minutes -- seconds (-- days vacation)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,160 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.clock-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.current-time {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.time-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Courier New', monospace;
+}
+
+.timezone-info {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.countdown-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.countdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.countdown-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #495057;
+    flex: 1;
+}
+
+.countdown-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    font-family: 'Courier New', monospace;
+    text-align: right;
+    flex: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 4px;
+    }
+    .clock-card {
+        padding: 8px;
+        border-radius: 10px;
+    }
+    .time-display {
+        font-size: 2rem;
+    }
+    .timezone-info {
+        font-size: 1rem;
+    }
+    .countdown-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 10px 8px;
+    }
+    .countdown-label {
+        font-size: 1rem;
+    }
+    .countdown-value {
+        text-align: left;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .clock-card {
+        padding: 4px;
+    }
+    .time-display {
+        font-size: 1.2rem;
+    }
+    .countdown-label, .countdown-value {
+        font-size: 0.9rem;
+    }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.clock-card {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.countdown-item {
+    animation: fadeIn 0.8s ease-out;
+    animation-fill-mode: both;
+}
+
+.countdown-item:nth-child(1) { animation-delay: 0.1s; }
+.countdown-item:nth-child(2) { animation-delay: 0.2s; }
+.countdown-item:nth-child(3) { animation-delay: 0.3s; }
+.countdown-item:nth-child(4) { animation-delay: 0.4s; }
+.countdown-item:nth-child(5) { animation-delay: 0.5s; }
+</rewritten_file> 
