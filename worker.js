@@ -533,6 +533,7 @@ app.get('/', (c) => {
       gtag('js', new Date());
       gtag('config', 'G-6W5KJJKMLT');
     </script>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23667eea'/%3E%3Ctext x='32' y='40' font-size='32' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3E%F0%9F%95%90%3C/text%3E%3C/svg%3E">
 </head>
 <body>
     <div class="container">
