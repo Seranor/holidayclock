@@ -210,7 +210,6 @@ function getTimezoneFromLocation(locationData) {
     'TV': 'Pacific/Funafuti', // Tuvalu
     'NR': 'Pacific/Nauru', // Nauru
     'PW': 'Pacific/Palau', // Palau
-    'MH': 'Pacific/Majuro', // Marshall Islands
     'FM': 'Pacific/Pohnpei', // Micronesia
     'GU': 'Pacific/Guam', // Guam
     'MP': 'Pacific/Saipan', // Northern Mariana Islands
@@ -676,16 +675,15 @@ app.get('/api/time', async (c) => {
     
     // Get location from IP
     const locationData = await getLocationFromIP(userIP)
-    let userTimezone = 'America/New_York'
+    const userTimezone = getTimezoneFromLocation(locationData)
     let locationInfo = 'Location not detected'
     
     if (locationData && locationData.country_code === 'US' && locationData.region_code) {
-      userTimezone = getStateTimezone(locationData.region_code)
-      locationInfo = \`\${locationData.city}, \${locationData.region_code}\`
+      locationInfo = `${locationData.city}, ${locationData.region_code}`
     } else if (locationData && locationData.country_code === 'US') {
       locationInfo = 'United States'
     } else if (locationData) {
-      locationInfo = \`\${locationData.city || ''}, \${locationData.country_name || ''}\`.trim()
+      locationInfo = `${locationData.city || ''}, ${locationData.country_name || ''}`.trim()
     }
     
     const currentYear = now.year()
