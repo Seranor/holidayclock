@@ -5,9 +5,6 @@ import moment from 'moment-timezone'
 
 const app = new Hono()
 
-// Serve static files from public directory
-app.use('/*', serveStatic({ root: './public' }))
-
 // Get US holidays from Nager.Date API
 async function getUSHolidays(year) {
   try {
@@ -100,9 +97,7 @@ app.get('/api/time', async (c) => {
   }
 })
 
-// Fallback route
-app.get('/*', async (c) => {
-  return c.text('Holiday Clock API is running.')
-})
+// Serve static files - this should be the last route
+app.use('/*', serveStatic({ root: './public' }))
 
 export default app 
