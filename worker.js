@@ -435,7 +435,16 @@ app.get('/', (c) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holiday Clock</title>
+    <title>Holiday Clock - Worldwide Holiday Countdown & Timezone</title>
+    <meta name="description" content="See the current time and countdown to the next public holiday in your region. Supports US states and worldwide timezones.">
+    <meta name="keywords" content="holiday, clock, countdown, timezone, US holidays, world holidays, timer, calendar">
+    <meta name="author" content="Holiday Clock">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Holiday Clock - Worldwide Holiday Countdown & Timezone">
+    <meta property="og:description" content="See the current time and countdown to the next public holiday in your region. Supports US states and worldwide timezones.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://holidayclock.net/">
+    <meta property="og:image" content="https://holidayclock.net/og-image.png">
     <style>
         * {
             margin: 0;
@@ -778,6 +787,30 @@ app.get('/api/time', async (c) => {
   } catch (error) {
     return c.json({ error: 'Failed to get time data' }, 500)
   }
+})
+
+// robots.txt route
+app.get('/robots.txt', (c) => {
+  return c.text(`User-agent: *\nAllow: /\nSitemap: https://holidayclock.net/sitemap.xml`)
+})
+
+// sitemap.xml route
+app.get('/sitemap.xml', (c) => {
+  const baseUrl = 'https://holidayclock.net'
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/api/time</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>`
+  return c.text(xml, 200, { 'content-type': 'application/xml' })
 })
 
 // Serve static files - this should be the last route
