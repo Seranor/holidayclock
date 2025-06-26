@@ -63,12 +63,42 @@ const US_STATE_TIMEZONES = {
 // Get location info from IP
 async function getLocationFromIP(ip) {
   try {
-    // Use ipapi.co for free IP geolocation
-    const response = await axios.get(`https://ipapi.co/${ip}/json/`)
+    console.log('Detecting location for IP:', ip)
+    
+    // Try ipapi.co first
+    const response = await axios.get(`https://ipapi.co/${ip}/json/`, {
+      timeout: 5000,
+      headers: {
+        'User-Agent': 'HolidayClock/1.0'
+      }
+    })
+    
+    console.log('Location data from ipapi.co:', response.data)
     return response.data
   } catch (error) {
-    console.error('Failed to get location from IP:', error.message)
-    return null
+    console.error('ipapi.co failed:', error.message)
+    
+    try {
+      // Fallback to ip-api.com
+      const fallbackResponse = await axios.get(`http://ip-api.com/json/${ip}`, {
+        timeout: 5000
+      })
+      
+      console.log('Location data from ip-api.com:', fallbackResponse.data)
+      
+      // Convert ip-api.com format to match ipapi.co format
+      const data = fallbackResponse.data
+      return {
+        country_code: data.countryCode,
+        country_name: data.country,
+        region_code: data.region,
+        city: data.city,
+        timezone: data.timezone
+      }
+    } catch (fallbackError) {
+      console.error('ip-api.com also failed:', fallbackError.message)
+      return null
+    }
   }
 }
 
@@ -665,6 +695,28 @@ app.get('/', (c) => {
 </body>
 </html>
   `)
+})
+
+// Test endpoint for debugging IP detection
+app.get('/test-ip', async (c) => {
+  try {
+    const userIP = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || '8.8.8.8'
+    const locationData = await getLocationFromIP(userIP)
+    const userTimezone = getTimezoneFromLocation(locationData)
+    
+    return c.json({
+      ip: userIP,
+      location: locationData,
+      timezone: userTimezone,
+      headers: {
+        'CF-Connecting-IP': c.req.header('CF-Connecting-IP'),
+        'X-Forwarded-For': c.req.header('X-Forwarded-For'),
+        'CF-IPCountry': c.req.header('CF-IPCountry')
+      }
+    })
+  } catch (error) {
+    return c.json({ error: error.message }, 500)
+  }
 })
 
 // API route
