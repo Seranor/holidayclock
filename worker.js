@@ -1,8 +1,12 @@
 import { Hono } from 'hono'
+import { serveStatic } from 'hono/cloudflare-workers'
 import axios from 'axios'
 import moment from 'moment-timezone'
 
 const app = new Hono()
+
+// Serve static files from public directory
+app.use('/*', serveStatic({ root: './public' }))
 
 // Get US holidays from Nager.Date API
 async function getUSHolidays(year) {
