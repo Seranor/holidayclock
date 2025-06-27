@@ -431,12 +431,12 @@ function getHolidayCountdown(holidayDate, holidayName, vacationDays = 0) {
 app.get('/', (c) => {
   return c.html(`
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holiday Clock - Worldwide Holiday Countdown & Timezone</title>
-    <meta name="description" content="See the current time and countdown to the next public holiday in your region. Supports US states and worldwide timezones.">
+    <meta name="description" content="See the current time and countdown to holiday. Supports US states and worldwide timezones.">
     <meta name="keywords" content="holiday, clock, countdown, timezone, US holidays, world holidays, timer, calendar">
     <meta name="author" content="Holiday Clock">
     <meta name="robots" content="index, follow">
@@ -705,28 +705,6 @@ app.get('/', (c) => {
 </body>
 </html>
   `)
-})
-
-// Test endpoint for debugging IP detection
-app.get('/test-ip', async (c) => {
-  try {
-    const userIP = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || '8.8.8.8'
-    const locationData = await getLocationFromIP(userIP)
-    const userTimezone = getTimezoneFromLocation(locationData)
-    
-    return c.json({
-      ip: userIP,
-      location: locationData,
-      timezone: userTimezone,
-      headers: {
-        'CF-Connecting-IP': c.req.header('CF-Connecting-IP'),
-        'X-Forwarded-For': c.req.header('X-Forwarded-For'),
-        'CF-IPCountry': c.req.header('CF-IPCountry')
-      }
-    })
-  } catch (error) {
-    return c.json({ error: error.message }, 500)
-  }
 })
 
 // API route
