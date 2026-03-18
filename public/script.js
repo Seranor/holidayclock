@@ -1,31 +1,145 @@
-// 格式化倒计时显示
-function formatCountdown(countdown) {
-    if (!countdown) return '-- days -- hours -- minutes -- seconds';
+// 语言配置
+const languages = {
+    'zh-CN': {
+        weekend: '距离周末',
+        nearestHoliday: '下一个假期',
+        thanksgiving: '感恩节',
+        christmas: '圣诞节',
+        newYear: '新年',
+        timezone: '时区信息',
+        days: '天',
+        hours: '小时',
+        minutes: '分钟',
+        seconds: '秒',
+        vacationDays: '天假期',
+        loadingFailed: '加载失败'
+    },
+    'en-US': {
+        weekend: 'Time until weekend',
+        nearestHoliday: 'Time until next holiday',
+        thanksgiving: 'Thanksgiving',
+        christmas: 'Christmas',
+        newYear: 'New Year',
+        timezone: 'Timezone info',
+        days: 'days',
+        hours: 'hours',
+        minutes: 'minutes',
+        seconds: 'seconds',
+        vacationDays: 'days vacation',
+        loadingFailed: 'Load failed'
+    },
+    'ja-JP': {
+        weekend: '週末まで',
+        nearestHoliday: '次の休日まで',
+        thanksgiving: '感謝祭',
+        christmas: 'クリスマス',
+        newYear: '新年',
+        timezone: 'タイムゾーン情報',
+        days: '日',
+        hours: '時間',
+        minutes: '分',
+        seconds: '秒',
+        vacationDays: '日間の休暇',
+        loadingFailed: '読み込みに失敗しました'
+    },
+    'ko-KR': {
+        weekend: '주말까지',
+        nearestHoliday: '다음 휴일까지',
+        thanksgiving: '추수감사절',
+        christmas: '크리스마스',
+        newYear: '신년',
+        timezone: '시간대 정보',
+        days: '일',
+        hours: '시간',
+        minutes: '분',
+        seconds: '초',
+        vacationDays: '일 휴가',
+        loadingFailed: '로드 실패'
+    },
+    'fr-FR': {
+        weekend: 'Temps jusqu\'au week-end',
+        nearestHoliday: 'Temps jusqu\'à la prochaine fête',
+        thanksgiving: 'Action de grâce',
+        christmas: 'Noël',
+        newYear: 'Nouvel an',
+        timezone: 'Informations sur le fuseau horaire',
+        days: 'jours',
+        hours: 'heures',
+        minutes: 'minutes',
+        seconds: 'secondes',
+        vacationDays: 'jours de vacances',
+        loadingFailed: 'Échec du chargement'
+    },
+    'de-DE': {
+        weekend: 'Zeit bis zum Wochenende',
+        nearestHoliday: 'Zeit bis zum nächsten Feiertag',
+        thanksgiving: 'Erntedankfest',
+        christmas: 'Weihnachten',
+        newYear: 'Neujahr',
+        timezone: 'Zeitzoneninformation',
+        days: 'Tage',
+        hours: 'Stunden',
+        minutes: 'Minuten',
+        seconds: 'Sekunden',
+        vacationDays: 'Urlaubstage',
+        loadingFailed: 'Laden fehlgeschlagen'
+    },
+    'es-ES': {
+        weekend: 'Tiempo hasta el fin de semana',
+        nearestHoliday: 'Tiempo hasta la próxima fiesta',
+        thanksgiving: 'Día de Acción de Gracias',
+        christmas: 'Navidad',
+        newYear: 'Año Nuevo',
+        timezone: 'Información de zona horaria',
+        days: 'días',
+        hours: 'horas',
+        minutes: 'minutos',
+        seconds: 'segundos',
+        vacationDays: 'días de vacaciones',
+        loadingFailed: 'Carga fallida'
+    }
+};
+
+// 检测用户语言
+function detectUserLanguage() {
+    const userLang = navigator.language || 'en-US';
+    const supportedLangs = Object.keys(languages);
     
-    const { days, hours, minutes, seconds } = countdown;
-    return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+    // 查找匹配的语言或返回默认语言
+    for (let lang of supportedLangs) {
+        if (userLang.startsWith(lang.split('-')[0])) {
+            return lang;
+        }
+    }
+    
+    return 'en-US'; // 默认英语
 }
 
-// 格式化假日倒计时显示（包含假期天数）
-function formatHolidayCountdown(countdown) {
-    if (!countdown) return '-- days -- hours -- minutes -- seconds (-- days vacation)';
+// 获取当前语言
+let currentLang = detectUserLanguage();
+
+// 格式化倒计时显示
+function formatCountdown(countdown) {
+    const lang = languages[currentLang];
+    if (!countdown) return `-- ${lang.days} -- ${lang.hours} -- ${lang.minutes} -- ${lang.seconds}`;
     
-    const { days, hours, minutes, seconds, vacationDays } = countdown;
-    return `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds (${vacationDays} days vacation)`;
+    const { days, hours, minutes, seconds } = countdown;
+    return `${days} ${lang.days} ${hours} ${lang.hours} ${minutes} ${lang.minutes} ${seconds} ${lang.seconds}`;
 }
 
 // 更新当前时间显示
 function updateCurrentTime() {
     const now = new Date();
-    const dateString = now.toLocaleDateString('en-US');
-    const timeString = now.toLocaleTimeString('en-US', {
+    const dateString = now.toLocaleDateString(currentLang);
+    const timeString = now.toLocaleTimeString(currentLang, {
         hour12: false,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
     });
     
-    document.getElementById('currentTime').textContent = `${dateString} ${timeString}`;
+    document.getElementById('currentTime').textContent = timeString;
+    document.getElementById('currentDate').textContent = dateString;
 }
 
 // 获取用户时区信息
@@ -41,8 +155,32 @@ function getUserTimezone() {
 
 // 更新时区信息
 function updateTimezoneInfo() {
+    const lang = languages[currentLang];
     const timezoneInfo = getUserTimezone();
     document.getElementById('timezoneInfo').textContent = timezoneInfo;
+}
+
+// 更新页面文字
+function updatePageText() {
+    const lang = languages[currentLang];
+    
+    // 更新标签文字
+    document.querySelectorAll('.countdown-label')[0].textContent = lang.weekend;
+    document.querySelectorAll('.countdown-label')[1].textContent = `${lang.nearestHoliday} `;
+    document.querySelectorAll('.countdown-label')[2].textContent = lang.thanksgiving;
+    document.querySelectorAll('.countdown-label')[3].textContent = lang.christmas;
+    document.querySelectorAll('.countdown-label')[4].textContent = lang.newYear;
+    
+    // 更新假期天数文字
+    const vacationElements = document.querySelectorAll('.vacation-days');
+    if (vacationElements.length >= 3) {
+        vacationElements[0].textContent = `4${lang.vacationDays}`;
+        vacationElements[1].textContent = `2${lang.vacationDays}`;
+        vacationElements[2].textContent = `1${lang.vacationDays}`;
+    }
+    
+    // 更新页面标题
+    document.title = 'Holiday Clock - ' + (currentLang === 'zh-CN' ? '实时倒计时' : 'Real-time Countdown');
 }
 
 let countdownState = {
@@ -73,11 +211,13 @@ function tickCountdown(obj) {
 }
 
 function updateCountdownDisplay() {
+    const lang = languages[currentLang];
+    
     document.getElementById('weekendCountdown').textContent = formatCountdown(countdownState.weekend);
-    document.getElementById('nearestHoliday').textContent = formatHolidayCountdown(countdownState.nearestHoliday);
-    document.getElementById('thanksgivingCountdown').textContent = formatHolidayCountdown(countdownState.thanksgiving);
-    document.getElementById('christmasCountdown').textContent = formatHolidayCountdown(countdownState.christmas);
-    document.getElementById('newYearCountdown').textContent = formatHolidayCountdown(countdownState.newYear);
+    document.getElementById('nearestHoliday').textContent = formatCountdown(countdownState.nearestHoliday);
+    document.getElementById('thanksgivingCountdown').textContent = formatCountdown(countdownState.thanksgiving);
+    document.getElementById('christmasCountdown').textContent = formatCountdown(countdownState.christmas);
+    document.getElementById('newYearCountdown').textContent = formatCountdown(countdownState.newYear);
 }
 
 function startCountdownTick() {
@@ -115,15 +255,17 @@ async function fetchTimeData() {
         }
         updateCountdownDisplay();
     } catch (error) {
-        document.getElementById('weekendCountdown').textContent = 'Load failed';
-        document.getElementById('nearestHoliday').textContent = 'Load failed';
-        document.getElementById('thanksgivingCountdown').textContent = 'Load failed';
-        document.getElementById('christmasCountdown').textContent = 'Load failed';
-        document.getElementById('newYearCountdown').textContent = 'Load failed';
+        const lang = languages[currentLang];
+        document.getElementById('weekendCountdown').textContent = lang.loadingFailed;
+        document.getElementById('nearestHoliday').textContent = lang.loadingFailed;
+        document.getElementById('thanksgivingCountdown').textContent = lang.loadingFailed;
+        document.getElementById('christmasCountdown').textContent = lang.loadingFailed;
+        document.getElementById('newYearCountdown').textContent = lang.loadingFailed;
     }
 }
 
 function initApp() {
+    updatePageText();
     updateTimezoneInfo();
     updateCurrentTime();
     fetchTimeData();
@@ -133,4 +275,4 @@ function initApp() {
 }
 
 // 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', initApp); 
+document.addEventListener('DOMContentLoaded', initApp);

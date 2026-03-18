@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Detection Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        .test-results {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 语言检测功能测试</h1>
+        
+        <div class="test-section">
+            <div class="test-title">测试说明</div>
+            <p>此页面用于测试语言检测和国际化功能。点击下方按钮运行完整的语言检测测试套件。</p>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">运行测试</div>
+            <button onclick="runTests()">运行语言检测测试</button>
+            <div class="test-results" id="testResults"></div>
+        </div>
+
+        <div class="test-section">
+            <div class="test-title">浏览器信息</div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-label">User Agent</div>
+                    <div class="info-value" id="userAgent"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Language</div>
+                    <div class="info-value" id="browserLang"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Platform</div>
+                    <div class="info-value" id="platform"></div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Timezone</div>
+                    <div class="info-value" id="timezone"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="lang-test.js"></script>
+    <script>
+        // 页面加载时显示浏览器信息
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userAgent').textContent = navigator.userAgent;
+            document.getElementById('browserLang').textContent = navigator.language;
+            document.getElementById('platform').textContent = navigator.platform;
+            document.getElementById('timezone').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        });
+
+        // 重定向console.log到页面显示
+        const originalLog = console.log;
+        const testResults = document.getElementById('testResults');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const logLine = document.createElement('div');
+            logLine.textContent = args.join(' ');
+            testResults.appendChild(logLine);
+            testResults.scrollTop = testResults.scrollHeight;
+        };
+
+        // 运行测试
+        function runTests() {
+            testResults.innerHTML = '';
+            testResults.style.display = 'block';
+            
+            // 运行语言检测测试
+            // 这里会调用lang-test.js中的代码
+            // 我们通过重新执行脚本来确保测试是最新的
+            const script = document.createElement('script');
+            script.src = 'lang-test.js';
+            script.onload = function() {
+                console.log('✅ 语言检测测试运行完成');
+            };
+            document.head.appendChild(script);
+            
+            return false;
+        }
+
+        // 初始化页面时自动运行测试
+        // 但为了演示，我们让用户手动点击运行
+    </script>
+</body>
+</html>
